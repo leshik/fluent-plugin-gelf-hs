@@ -67,7 +67,7 @@ module Fluent
         end
       end
 
-      if !gelfentry.key?('short_message') or gelfentry['short_message'].to_s.empty? or !is_text(gelfentry['short_message'].bytes.to_a) then
+      if !gelfentry.key?('short_message') or gelfentry['short_message'].to_s.empty? or gelfentry['short_message'].to_s.strip.empty? then
         # allow other non-empty fields to masquerade as the short_message if it is unset
         if gelfentry.key?('_message') and !gelfentry['_message'].to_s.empty? then
           gelfentry['short_message'] = gelfentry.delete('_message')
@@ -88,16 +88,6 @@ module Fluent
       return gelfentry.delete_if{ |k,v| v.nil? }
 
     end
-
-    def is_text(bytes)
-        for c in bytes do
-            if c > 32 && c != 127 then
-                return true
-            end
-        end
-        return false
-    end
-
 
     def make_json(gelfentry,conf)
       gelfentry['version'] = '1.0'

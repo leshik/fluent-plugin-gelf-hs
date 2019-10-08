@@ -39,7 +39,7 @@ class GELFOutputTest < Test::Unit::TestCase
   def test_empty_short_message
     d = create_driver
     time = Time.now
-    d.emit({"short_message" => "\n \n"}, time.to_i)
+    d.emit({"short_message" => "\n\r \n"}, time.to_i)
     d.expect_format({'_tag' => 'test', 'timestamp' => time.to_i, 'short_message' => '(no message)'}.to_msgpack)
     d.run
   end
